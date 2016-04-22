@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private float speed = 5f;
     [SerializeField]
     private float lookSensitivity = 3f;
+    [SerializeField]
+    private float jumpPower = 100f;
 
     private PlayerMotor playerMotor;
 
@@ -20,6 +22,12 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        /**
+        Jumping
+         */
+        bool jump = Input.GetButtonDown("Jump");
+        playerMotor.Jump(jump ? transform.up * jumpPower : Vector3.zero);
+
         /**
         Movement
          */

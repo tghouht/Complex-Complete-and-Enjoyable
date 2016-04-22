@@ -10,6 +10,7 @@ public class PlayerMotor : MonoBehaviour
 
     private Vector3 velocity;
     private Vector3 rotation;
+    private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
 
@@ -27,9 +28,15 @@ public class PlayerMotor : MonoBehaviour
 	// Update is called once per frame
 	public void FixedUpdate ()
     {
+        DoJump();
 		DoMovement();
         DoRotation();
 	}
+
+    public void Jump(Vector3 jump)
+    {
+        currentJump = jump;
+    }
 
     public void Move(Vector3 vel)
     {
@@ -44,6 +51,14 @@ public class PlayerMotor : MonoBehaviour
     public void RotateCamera(float camRot)
     {
 		activeCameraRot = camRot;
+    }
+
+    private void DoJump()
+    {
+        if (currentJump != Vector3.zero)
+        {
+            rigidbody.AddForce(currentJump);
+        }
     }
 
 	private void DoMovement()
