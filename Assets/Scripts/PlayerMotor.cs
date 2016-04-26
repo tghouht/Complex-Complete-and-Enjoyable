@@ -13,9 +13,9 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
-    //[NonSerialized]
+    [NonSerialized]
     public Vector3 collisionPoint;
-    //[NonSerialized]
+    [NonSerialized]
     public bool isTouching;
 
     [SerializeField]
@@ -72,7 +72,7 @@ public class PlayerMotor : MonoBehaviour
             if (isTouching)
             {
                 Vector3 collRay = (collisionPoint - transform.position).normalized;
-                velocity -= Vector3.Project(velocity, collRay);
+                velocity -= Vector3.Project(velocity, collRay); //Subtract component of velocity along collRay from velocity to get movement directed away from collision
             }
 
             Vector3 movement = transform.position + velocity * Time.fixedDeltaTime;
