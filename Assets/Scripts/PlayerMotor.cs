@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerMotor : MonoBehaviour
@@ -13,6 +13,10 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
+    //[NonSerialized]
+    public Vector3 collisionPoint;
+    //[NonSerialized]
+    public bool isTouching;
 
     [SerializeField]
     private float cameraRotMax = 85f;
@@ -65,7 +69,14 @@ public class PlayerMotor : MonoBehaviour
     {
         if (velocity != Vector3.zero)
         {
+            if (isTouching)
+            {
+                Vector3 collRay = (collisionPoint - transform.position).normalized;
+                velocity -= Vector3.Project(velocity, collRay);
+            }
+
             Vector3 movement = transform.position + velocity * Time.fixedDeltaTime;
+
             rigidbody.MovePosition(movement);
         }
     }
