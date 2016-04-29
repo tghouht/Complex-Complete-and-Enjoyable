@@ -6,7 +6,9 @@ using System.Collections.Generic;
 public class PlayerCollider : MonoBehaviour
 {
     [SerializeField]
-    private List<String> tags;
+    private List<String> specialCollisionIgnore;
+    [SerializeField]
+    private LayerMask groundLayer;
 
     private PlayerMotor playerMotor;
 
@@ -20,18 +22,36 @@ public class PlayerCollider : MonoBehaviour
 
     }
 
+    public void FixedUpdate()
+    {
+        if (Physics.Raycast(transform.position, -transform.up, 0.5f, groundLayer.value))
+        {
+            //DebugConfig.print("Found raycast DOWN - " + groundLayer.ToString());
+            playerMotor.isGrounded = true;
+        }
+        else
+        {
+            //DebugConfig.print("No");
+            playerMotor.isGrounded = false;
+        }
+    }
+
     public void OnCollisionStay(Collision collision)
     {
-        if (tags.Contains(collision.gameObject.tag)) return;
+        if (specialCollisionIgnore.Contains(collision.gameObject.tag)) return;
 
         playerMotor.isTouching = true;
         playerMotor.collisionPoint = collision.contacts[0].point;
+
+        DebugConfig.print("OnCollisionStay true for - " + collision.gameObject.name);
     }
 
     public void OnCollisionExit(Collision collision)
     {
-        if (tags.Contains(collision.gameObject.tag)) return;
+        if (specialCollisionIgnore.Contains(collision.gameObject.tag)) return;
 
         playerMotor.isTouching = false;
+
+        DebugConfig.print("OnCollisionExit true for - " + collision.gameObject.name);
     }
 }

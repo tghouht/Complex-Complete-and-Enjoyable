@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        DebugConfig.isDebug = true;
 		playerMotor = GetComponent<PlayerMotor>();
 	}
 	
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
         /**
         Jumping
          */
-        bool jump = Input.GetButtonDown("Jump");
+        bool jump = Input.GetButtonDown("Jump") && playerMotor.isGrounded;
         playerMotor.Jump(jump ? transform.up * jumpPower : Vector3.zero);
 
         /**
@@ -58,5 +59,10 @@ public class PlayerController : MonoBehaviour
         float bodyRotation = yRot * lookSensitivity;
 
         playerMotor.Rotate(new Vector3(0f, bodyRotation, 0f));
+
+        /**
+        Shooting
+         */
+        if(Input.GetButton("Fire1")) playerMotor.Shoot();
 	}
 }

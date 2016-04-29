@@ -13,13 +13,18 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
+    private float lastShot = 0f;
     [NonSerialized]
     public Vector3 collisionPoint;
     [NonSerialized]
     public bool isTouching;
+    [NonSerialized]
+    public bool isGrounded;
 
     [SerializeField]
     private float cameraRotMax = 85f;
+    [SerializeField]
+    private float shootDelay = 1f;
 
     private Rigidbody rigidbody;
 
@@ -32,6 +37,7 @@ public class PlayerMotor : MonoBehaviour
 	// Update is called once per frame
 	public void FixedUpdate ()
     {
+        lastShot += Time.deltaTime;
         DoJump();
 		DoMovement();
         DoRotation();
@@ -50,6 +56,15 @@ public class PlayerMotor : MonoBehaviour
     public void Rotate(Vector3 rot)
     {
         rotation = rot;
+    }
+
+    public void Shoot()
+    {
+        if (lastShot >= shootDelay)
+        {
+            lastShot = 0f;
+            DebugConfig.print("Just shot a bullet!");
+        }
     }
 
     public void RotateCamera(float camRot)
