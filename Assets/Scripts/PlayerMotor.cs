@@ -14,11 +14,11 @@ public class PlayerMotor : MonoBehaviour
     private float activeCameraRot;
     private float currentCameraRot;
     private float lastShot = 0f;
-    [NonSerialized]
+    //[NonSerialized]
     public Vector3 collisionPoint;
-    [NonSerialized]
+    //[NonSerialized]
     public bool isTouching;
-    [NonSerialized]
+    //[NonSerialized]
     public bool isGrounded;
 
     [SerializeField]
@@ -87,7 +87,11 @@ public class PlayerMotor : MonoBehaviour
             if (isTouching)
             {
                 Vector3 collRay = (collisionPoint - transform.position).normalized;
-                velocity -= Vector3.Project(velocity, collRay); //Subtract component of velocity along collRay from velocity to get movement directed away from collision
+                float dot = Vector3.Dot(velocity, collRay);
+                if (dot >= 0) //If dot is negative , it has no component along velocity
+                {
+                    velocity -= dot * collRay; //Subtract component of velocity along collRay from velocity to get movement directed away from collision
+                }
             }
 
             Vector3 movement = transform.position + velocity * Time.fixedDeltaTime;
