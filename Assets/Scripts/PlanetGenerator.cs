@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class PlanetGenerator : MonoBehaviour {
+public class PlanetGenerator : NetworkBehaviour {
 
 	public string seed = "";
 
@@ -29,10 +28,25 @@ public class PlanetGenerator : MonoBehaviour {
 	static private GameObject planetPrefab;
 	private List<Transform> planets = new List<Transform>();
 
-	void Start(){
+
+    public override void OnStartClient()
+    {
+
+    }
+
+    public void OnPlayerConnected(NetworkPlayer player)
+    {
+
+    }
+
+	public override void OnStartServer ()
+    {
+
 		//If no seed generate random one
-		if(seed == "")
+		if (seed.Equals(""))
+		{
 			seed = System.DateTime.Now.ToString();
+		}
 
 		//Variable for replicatable randomness
 		System.Random pseudo = new System.Random(seed.GetHashCode());
@@ -86,6 +100,7 @@ public class PlanetGenerator : MonoBehaviour {
 			}
 
 			GameObject planetGO = (GameObject)Instantiate(planetPrefab,currentPosition,transform.rotation);
+            NetworkServer.Spawn(planetGO);
 			planets.Add(planetGO.transform);
 			planetGO.transform.SetParent (transform);
 
