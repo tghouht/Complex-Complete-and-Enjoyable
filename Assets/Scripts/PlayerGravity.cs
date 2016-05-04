@@ -9,13 +9,13 @@ public class PlayerGravity : MonoBehaviour {
 	public List<PlanetGravity> nearPlanets = new List<PlanetGravity>();
 
 	Rigidbody bodyrigid;
-	FirstPersonController controller;
+    [SerializeField]
+	private LayerMask ground;
 	
 	void Start(){
 		bodyrigid = GetComponent<Rigidbody> ();
 		bodyrigid.useGravity = false;
 		bodyrigid.constraints = RigidbodyConstraints.FreezeRotation;
-		controller = GetComponent<FirstPersonController>();
 	}
 
 	void FixedUpdate () {
@@ -31,7 +31,7 @@ public class PlayerGravity : MonoBehaviour {
 
 			//Distance to each nearby Planet
 			RaycastHit ray = new RaycastHit();
-			Physics.Raycast(transform.position,(planet.transform.position - transform.position).normalized,out ray,float.MaxValue,controller.groundedMask);
+			Physics.Raycast(transform.position,(planet.transform.position - transform.position).normalized,out ray,float.MaxValue,ground.value);
 
 			//Keeps Track of nearest planet
 			if(ray.distance < smallestDistance){

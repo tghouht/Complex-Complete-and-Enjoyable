@@ -25,7 +25,8 @@ public class PlanetGenerator : NetworkBehaviour {
 	static public float worldY = 50f;
 	static public float worldZ = 50f;
 
-	static private GameObject planetPrefab;
+    [SerializeField]
+	private GameObject planetPrefab;
 	private List<Transform> planets = new List<Transform>();
 
 
@@ -41,7 +42,7 @@ public class PlanetGenerator : NetworkBehaviour {
 
 	public override void OnStartServer ()
     {
-
+        print("Server has been started and is now generating planets!");
 		//If no seed generate random one
 		if (seed.Equals(""))
 		{
@@ -54,7 +55,7 @@ public class PlanetGenerator : NetworkBehaviour {
 		//Number of planets to generate
 		int numofPlanets = pseudo.Next(minNumofPlanets, maxNumofPlanets + 1);
 
-		planetPrefab = Resources.Load <GameObject>("Prefabs/Planet");
+		//planetPrefab = Resources.Load <GameObject>("Prefabs/Planet");
 
 		for(int i = 0;i < numofPlanets;i++){
 			//Sets variables
@@ -109,11 +110,6 @@ public class PlanetGenerator : NetworkBehaviour {
 			PlanetGravity planetSC = planetGO.GetComponent <PlanetGravity>();
 			planetSC.density = density;
 			planetSC.scale = scale;
-
-			if(i == 0){
-				GameObject player = GameObject.FindWithTag ("Player");
-				player.transform.position = planetGO.transform.position;
-			}
 		}
 	}
 
