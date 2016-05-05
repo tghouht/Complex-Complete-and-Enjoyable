@@ -13,6 +13,9 @@ public class PlanetGravity : MonoBehaviour {
 	float volume;
 
 	void Start(){
+		
+		GenerateTerrain();
+
 		//Sets Scale to generated scale
 		transform.localScale = new Vector3 (scale, scale, scale);
 
@@ -21,8 +24,6 @@ public class PlanetGravity : MonoBehaviour {
 		
 		//Calculate Mass of planet
 		mass = density * volume;
-
-		CreateTerrain();
 	}
 
 	public Vector3 GetGravityForce(Rigidbody body) {
@@ -33,13 +34,14 @@ public class PlanetGravity : MonoBehaviour {
 		return (vector * force);
 	}
 
-	void CreateTerrain(){
+	void GenerateTerrain(){
 		System.Random psuedo = new System.Random(PlanetGenerator.seed.GetHashCode());
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		Vector3[] points = mesh.vertices;
+		float radius = points[0].magnitude;
 		
 		for(int i = 0;i < points.Length;i++)
-			points[i] = points[i].normalized * (scale + (float)psuedo.NextDouble()/15);
+			points[i] = points[i].normalized * (radius + (float)psuedo.NextDouble()/20);
 		
 		mesh.vertices = points;
 		mesh.RecalculateNormals();
