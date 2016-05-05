@@ -27,6 +27,8 @@ public class PlanetGenerator : NetworkBehaviour {
 
     [SerializeField]
 	private GameObject planetPrefab;
+    [SerializeField]
+    private GameObject planetParent;
 	private List<Transform> planets = new List<Transform>();
 
 
@@ -94,16 +96,15 @@ public class PlanetGenerator : NetworkBehaviour {
 					if(foundGoodPlace)
 						break;
 				}
-				if(numTries == 12 && !foundGoodPlace){
+				if(numTries == 12 && !foundGoodPlace) {
 					currentPosition = bestPosition;
 					print("Planet " + (i + 1) + " failed to place");
 				}
 			}
 
 			GameObject planetGO = (GameObject)Instantiate(planetPrefab,currentPosition,transform.rotation);
-            NetworkServer.Spawn(planetGO);
 			planets.Add(planetGO.transform);
-			planetGO.transform.SetParent (transform);
+			planetGO.transform.SetParent (planetParent.transform);
 
 			planetGO.name = "Planet (" + (i + 1) + ")";
 
@@ -111,6 +112,8 @@ public class PlanetGenerator : NetworkBehaviour {
 			planetSC.density = density;
 			planetSC.scale = scale;
 		}
+
+        NetworkServer.Spawn(planetParent);
 	}
 
 }
