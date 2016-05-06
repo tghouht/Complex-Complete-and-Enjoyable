@@ -1,0 +1,98 @@
+using UnityEngine;
+using System.Collections;
+
+public class thing : MonoBehaviour {
+
+	public static float speed = .1f;
+	public static float viewradius;
+	public static float jumppower;
+	public static ArrayList listofplayers;
+	public GameObject currenttarget;
+	public Rigidbody rigidbdy;
+	public CharacterController charactercontroller;
+	public Vector3 currentdirection;
+	void Start()
+	{
+		rigidbdy = gameObject.GetComponent<Rigidbody>();
+	}
+
+	void Update()
+	{
+		UpdateListOfPlayers ();
+		UpdateTarget ();
+
+		//Decide which way to go.
+		if (currenttarget.Equals (null)) {
+			Idle ();
+		} 
+
+		//Decide whether to idle or go after a player.
+		if (!currenttarget.Equals (null))
+			currenttarget = UpdateTarget ();
+		if (!currenttarget.Equals (null)) {
+			currentdirection = (transform.position - currenttarget.transform.position).normalized;
+			currentdirection.y = 0;
+		}
+			Jump();
+
+		currentdirection = new Vector3 (xmovecomponent, ymovecomponent, zmovecomponent);
+		//Move the hive member.
+		rigidbdy.MovePosition(transform.position + currentdirection * speed);
+	}
+	void FixedUpdate()
+	{
+
+	}
+
+	public GameObject UpdateTarget()
+	{
+		//get the closest player
+		for(int i = 0; i < listofplayers.Count; i++)
+		{
+			if (!currenttarget.Equals(null))
+			{
+				if(Vector3.Distance(gameObject.transform.position, currenttarget.transform.position) < Vector3.Distance(gameObject.transform.position, listofplayers[i]transform.position))
+					currenttarget = (GameObject)listofplayers[i];
+			}
+		}
+
+
+		//if there's a player that is attacking the enemy but further away, set that as target
+		//if there's another enemy already attacking an enemy and there's another player who is farther away but attacking
+		//
+		return(null);
+
+	}
+	public void UpdateListOfPlayers()
+	{
+		GameObject[] gameobjects = (GameObject[])GameObject.FindObjectsOfType(typeof(GameObject));
+		int iterator = 0;
+		for(int i = 0; i < gameobjects.Length; i++)
+		{
+			if (gameobjects [i].CompareTag("Player"))
+			{
+				listofplayers[iterator] = (gameobjects[i]);
+			}
+		}
+	}
+
+	//These are the different kinds of movement that the hive member can do.
+	public void MoveToward(GameObject currentplayer)
+	{
+		Vector3 dir = currentplayer.transform.position - transform.position;
+		xmovecomponent = dir.x;
+		zmovecomponent = dir.z;
+	}
+	public void Jump()
+	{
+		rigidbdy.AddForce(transform.up);
+	}
+	public void Idle()
+	{
+		if(Random.Range(1,100) == 1)
+		{
+			xmovecomponent = (int)Random.Range(-1,1);
+			zmovecomponent = (int)Random.Range(-1,1);
+		}
+	}
+}
