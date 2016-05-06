@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent (typeof (Rigidbody))]
 public class PlayerGravity : MonoBehaviour {
 
 
@@ -9,13 +10,12 @@ public class PlayerGravity : MonoBehaviour {
 	public List<PlanetGravity> nearPlanets = new List<PlanetGravity>();
 
 	Rigidbody bodyrigid;
-	LayerMask  groundedMask;
 	
 	void Start(){
 		bodyrigid = GetComponent<Rigidbody> ();
+
 		bodyrigid.useGravity = false;
 		bodyrigid.constraints = RigidbodyConstraints.FreezeRotation;
-		groundedMask = GetComponent<FirstPersonController>().groundedMask;
 	}
 
 	void FixedUpdate () {
@@ -23,29 +23,21 @@ public class PlayerGravity : MonoBehaviour {
 			return;
 		
 		Transform nearestPlanet = null;
-		float smallestDistance = int.MaxValue;
+		float smallestDistance = float.MaxValue;
 		Vector3 force = Vector3.zero;
 		foreach (PlanetGravity planet in nearPlanets){
-			//Gets gravity vector of planet
-			force += planet.GetGravityForce(bodyrigid);
-
-			//Distance to each nearby Planet
-			RaycastHit ray = new RaycastHit();
-			Physics.Raycast(transform.position,(planet.transform.position - transform.position).normalized,out ray,float.MaxValue,groundedMask);
-
-			//Keeps Track of nearest planet
-			if(ray.distance < smallestDistance){
-				smallestDistance = ray.distance;
+			force += planet.GetGravityForce (bodyrigid);
+			float distance = Vector3.Distance(planet.transform.position,transform.position);
+			if(distance < smallestDistance){
+				smallestDistance = distance;
 				nearestPlanet = planet.transform;
 			}
 		}
-
-		//Angles player towards nearest Planet
 		Vector3 gravityUp = (transform.position - nearestPlanet.position).normalized;
-		Quaternion rotation = Quaternion.FromToRotation(transform.up,gravityUp) * transform.rotation;
-		transform.rotation = Quaternion.Lerp(transform.rotation,rotation,Time.fixedDeltaTime * 2f);
+		Vector3 localUp = transform.up;
+		Quaternion rotation = Quaternion.FromToRotation(localUp,gravityUp) * transform.rotation;
 
-		//Applies Gravity
 		bodyrigid.AddForce(force);
+		transform.rotation = Quaternion.Lerp(transform.rotation,rotation,Time.fixedDeltaTime * 2f);
 	}
 }

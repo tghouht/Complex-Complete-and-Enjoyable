@@ -1,50 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 
+[CanEditMultipleObjects]
 public class PlanetGravity : MonoBehaviour {
 
-	//[HideInInspector]
 	public float density;
-	//[HideInInspector]
 	public float scale;
-	[HideInInspector]
 	float mass;
 	float volume;
+	//SphereCollider groundCollider;
 
 	void Start(){
-		
-		GenerateTerrain();
-
-		//Sets Scale to generated scale
-		transform.localScale = new Vector3 (scale, scale, scale);
-
-		//Estimates volume
-		volume = 4f/3f * Mathf.PI * Mathf.Pow(scale,3);
-		
-		//Calculate Mass of planet
+		/*SphereCollider[] colliders = transform.GetComponents<SphereCollider>();
+		foreach(SphereCollider sphere in colliders){
+			if(sphere.radius == .5f)
+				groundCollider = sphere;
+		}*/
+		volume = 4f/3f * Mathf.PI * Mathf.Pow(transform.localScale.x,3);
 		mass = density * volume;
 	}
 
 	public Vector3 GetGravityForce(Rigidbody body) {
-		//Direction to Planet from Player
 		Vector3 vector = (body.position - transform.position).normalized;
-		//Calculate Gravity force
 		float force = -(PlanetGenerator.gravityConstant * mass * body.mass)/Mathf.Pow((body.position - transform.position).magnitude,2);
 		return (vector * force);
 	}
+	void OnTriggerEnter(Collider obj){
+		if (obj.tag == "Player")
+			obj.GetComponent<PlayerGravity>().nearPlanets.Add(this);
 
-	void GenerateTerrain(){
-		System.Random psuedo = new System.Random(PlanetGenerator.seed.GetHashCode());
-		Mesh mesh = GetComponent<MeshFilter>().mesh;
-		Vector3[] points = mesh.vertices;
-		float radius = points[0].magnitude;
-		
-		for(int i = 0;i < points.Length;i++)
-			points[i] = points[i].normalized * (radius + (float)psuedo.NextDouble()/20);
-		
-		mesh.vertices = points;
-		mesh.RecalculateNormals();
-		GetComponent<MeshCollider>().sharedMesh = mesh;
 	}
+	void OnTriggerExit(Collider obj){
+		if (obj.tag == "Player")
+			obj.GetComponent<PlayerGravity>().nearPlanets.Remove(this);
+	}
+}
+
+[CustomEditor (typeof(PlanetGravity))]
+public class PlanetGravityEditor : Editor{
+
+	public override void OnInspectorGUI(){
+		PlanetGravity planet = (PlanetGravity)target;
+
+		if(DrawDefaultInspector()){
+			planet.transform.localScale.Set(planet.scale,planet.scale,planet.scale);
+		}
+	}
+	
 }
