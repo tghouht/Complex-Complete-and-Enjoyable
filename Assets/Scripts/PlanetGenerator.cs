@@ -104,7 +104,8 @@ public class PlanetGenerator : NetworkBehaviour {
 
 			GameObject planetGO = (GameObject)Instantiate(planetPrefab,currentPosition,transform.rotation);
 			planets.Add(planetGO.transform);
-			planetGO.transform.SetParent (planetParent.transform);
+            NetworkServer.Spawn(planetGO);
+			//planetGO.transform.SetParent (planetParent.transform);
 
 			planetGO.name = "Planet (" + (i + 1) + ")";
 
@@ -112,8 +113,6 @@ public class PlanetGenerator : NetworkBehaviour {
 			planetSC.density = density;
 			planetSC.scale = scale;
 		}
-
-        NetworkServer.Spawn(planetParent);
 	}
 
 }
