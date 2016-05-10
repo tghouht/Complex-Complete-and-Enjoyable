@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class PlanetGravity : MonoBehaviour {
+public class PlanetGravity : NetworkBehaviour {
 
-	//[HideInInspector]
+	[SyncVar]
 	public float density;
-	//[HideInInspector]
+	[SyncVar]
 	public float scale;
-	[HideInInspector]
+    [SyncVar]
 	float mass;
+    [SyncVar]
 	float volume;
 
 	void Start(){

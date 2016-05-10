@@ -31,7 +31,7 @@ public class PlayerGravity : MonoBehaviour {
 
 			//Distance to each nearby Planet
 			RaycastHit ray = new RaycastHit();
-			Physics.Raycast(transform.position,(planet.transform.position - transform.position).normalized,out ray,float.MaxValue,ground.value);
+			Physics.Raycast(transform.position, (planet.transform.position - transform.position).normalized, out ray, float.MaxValue, ground.value);
 
 			//Keeps Track of nearest planet
 			if(ray.distance < smallestDistance){
