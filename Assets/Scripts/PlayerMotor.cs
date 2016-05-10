@@ -102,7 +102,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void DoRotation()
     {
-		rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotation));
+		transform.Rotate(rotation);
 
         if (camera != null)
         {

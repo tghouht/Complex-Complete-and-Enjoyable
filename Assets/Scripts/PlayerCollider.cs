@@ -24,7 +24,7 @@ public class PlayerCollider : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Physics.Raycast(transform.position, -transform.up, 0.5f, groundLayer.value))
+        if (Physics.Raycast(transform.position, -transform.up, 1f, groundLayer.value))
         {
             //DebugConfig.print("Found raycast DOWN - " + groundLayer.ToString());
             playerMotor.isGrounded = true;
