@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerMotor : MonoBehaviour
+public class PlayerMotor : NetworkBehaviour
 {
 
     [SerializeField]
@@ -14,17 +15,21 @@ public class PlayerMotor : MonoBehaviour
     private float activeCameraRot;
     private float currentCameraRot;
     private float lastShot = 0f;
-    //[NonSerialized]
+    [NonSerialized]
     public Vector3 collisionPoint;
-    //[NonSerialized]
+    [NonSerialized]
     public bool isTouching;
-    //[NonSerialized]
+    [NonSerialized]
     public bool isGrounded;
 
     [SerializeField]
     private float cameraRotMax = 85f;
     [SerializeField]
     private float shootDelay = 1f;
+    [SerializeField]
+    private float bulletStr = 5f;
+    [SerializeField]
+    private GameObject bullet;
 
     private Rigidbody rigidbody;
 
@@ -58,12 +63,23 @@ public class PlayerMotor : MonoBehaviour
         rotation = rot;
     }
 
+    //Called on server
+    [Command]
+    private void CmdShoot()
+    {
+        GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, Quaternion.identity);
+        bulletc.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * bulletStr);
+        Physics.IgnoreCollision((Collider) bulletc.GetComponent<Collider>(), (Collider) transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
+        NetworkServer.Spawn(bulletc);
+    }
+
     public void Shoot()
     {
         if (lastShot >= shootDelay)
         {
             lastShot = 0f;
             DebugConfig.print("Just shot a bullet!");
+            CmdShoot();
         }
     }
 
