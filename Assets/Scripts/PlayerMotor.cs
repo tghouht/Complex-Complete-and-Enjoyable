@@ -67,8 +67,8 @@ public class PlayerMotor : NetworkBehaviour
     [Command]
     private void CmdShoot()
     {
-        GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, Quaternion.identity);
-        bulletc.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * bulletStr);
+        GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, transform.rotation);
+        bulletc.GetComponent<Rigidbody>().velocity = Camera.main.transform.forward * bulletStr;
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
             Physics.IgnoreCollision(bulletc.GetComponent<Collider>(), obj.transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
         NetworkServer.Spawn(bulletc);
