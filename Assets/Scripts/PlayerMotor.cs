@@ -13,13 +13,18 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
-    [NonSerialized]
+    private float lastShot = 0f;
+    //[NonSerialized]
     public Vector3 collisionPoint;
-    [NonSerialized]
+    //[NonSerialized]
     public bool isTouching;
+    //[NonSerialized]
+    public bool isGrounded;
 
     [SerializeField]
     private float cameraRotMax = 85f;
+    [SerializeField]
+    private float shootDelay = 1f;
 
     private Rigidbody rigidbody;
 
@@ -32,6 +37,7 @@ public class PlayerMotor : MonoBehaviour
 	// Update is called once per frame
 	public void FixedUpdate ()
     {
+        lastShot += Time.deltaTime;
         DoJump();
 		DoMovement();
         DoRotation();
@@ -50,6 +56,15 @@ public class PlayerMotor : MonoBehaviour
     public void Rotate(Vector3 rot)
     {
         rotation = rot;
+    }
+
+    public void Shoot()
+    {
+        if (lastShot >= shootDelay)
+        {
+            lastShot = 0f;
+            DebugConfig.print("Just shot a bullet!");
+        }
     }
 
     public void RotateCamera(float camRot)
@@ -72,7 +87,11 @@ public class PlayerMotor : MonoBehaviour
             if (isTouching)
             {
                 Vector3 collRay = (collisionPoint - transform.position).normalized;
-                velocity -= Vector3.Project(velocity, collRay); //Subtract component of velocity along collRay from velocity to get movement directed away from collision
+                float dot = Vector3.Dot(velocity, collRay);
+                if (dot >= 0) //If dot is negative , it has no component along velocity
+                {
+                    velocity -= dot * collRay; //Subtract component of velocity along collRay from velocity to get movement directed away from collision
+                }
             }
 
             Vector3 movement = transform.position + velocity * Time.fixedDeltaTime;
