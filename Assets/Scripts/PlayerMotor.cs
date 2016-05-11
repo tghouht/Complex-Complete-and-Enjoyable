@@ -69,7 +69,8 @@ public class PlayerMotor : NetworkBehaviour
     {
         GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, Quaternion.identity);
         bulletc.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * bulletStr);
-        Physics.IgnoreCollision((Collider) bulletc.GetComponent<Collider>(), (Collider) transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
+            Physics.IgnoreCollision(bulletc.GetComponent<Collider>(), obj.transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
         NetworkServer.Spawn(bulletc);
     }
 
