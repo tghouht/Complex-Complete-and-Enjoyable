@@ -12,9 +12,14 @@ public class PlayerCollider : MonoBehaviour
 
     private PlayerMotor playerMotor;
 
-    public void Start()
+    public void Awake()
     {
         playerMotor = GetComponent<PlayerMotor>();
+    }
+
+    public void Start()
+    {
+
     }
 
     public void Update()
