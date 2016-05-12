@@ -32,11 +32,13 @@ public class PlayerMotor : NetworkBehaviour
     private GameObject bullet;
 
     private Rigidbody rigidbody;
+    private PlayerInfo playerInfo;
 
 	// Use this for initialization
 	public void Start ()
     {
 		rigidbody = GetComponent<Rigidbody>();
+        playerInfo = GetComponent<PlayerInfo>();
 	}
 	
 	// Update is called once per frame
@@ -65,10 +67,10 @@ public class PlayerMotor : NetworkBehaviour
 
     //Called on server
     [Command]
-    private void CmdShoot()
+    private void CmdShoot(Vector3 cam, Vector3 vel)
     {
-        GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, transform.rotation);
-        bulletc.GetComponent<Rigidbody>().velocity = Camera.main.transform.forward * bulletStr;
+        GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, Quaternion.identity);
+        bulletc.GetComponent<Rigidbody>().velocity = cam * bulletStr + vel;
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
             Physics.IgnoreCollision(bulletc.GetComponent<Collider>(), obj.transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
         NetworkServer.Spawn(bulletc);
@@ -80,7 +82,7 @@ public class PlayerMotor : NetworkBehaviour
         {
             lastShot = 0f;
             DebugConfig.print("Just shot a bullet!");
-            CmdShoot();
+            CmdShoot(Camera.main.transform.forward, velocity);
         }
     }
 
@@ -127,6 +129,7 @@ public class PlayerMotor : NetworkBehaviour
             currentCameraRot = Mathf.Clamp(currentCameraRot, -cameraRotMax, cameraRotMax);
 
             camera.transform.localEulerAngles = new Vector3(currentCameraRot, 0, 0);
+            //playerInfo.cameraTransform = camera.transform;
         }
     }
 }
