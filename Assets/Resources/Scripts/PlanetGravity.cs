@@ -30,7 +30,7 @@ public class PlanetGravity : MonoBehaviour {
 		//Direction to Planet from Player
 		Vector3 vector = (body.position - transform.position).normalized;
 		//Calculate Gravity force
-		float force = -(PlanetGenerator.gravityConstant * mass * body.mass)/Mathf.Pow((body.position - transform.position).magnitude,2);
+		float force = -(PlanetGenerator.gravityConstant * mass * body.mass)/(body.position - transform.position).sqrMagnitude;
 		return (vector * force);
 	}
 
