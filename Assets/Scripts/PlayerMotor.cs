@@ -29,16 +29,18 @@ public class PlayerMotor : NetworkBehaviour
     [SerializeField]
     private float bulletStr = 5f;
     [SerializeField]
+    private float range = 50f;
+    [SerializeField]
     private GameObject bullet;
+    [SerializeField]
+    private GameObject linePrefab;
 
     private Rigidbody rigidbody;
-    private PlayerInfo playerInfo;
 
 	// Use this for initialization
 	public void Start ()
     {
 		rigidbody = GetComponent<Rigidbody>();
-        playerInfo = GetComponent<PlayerInfo>();
 	}
 	
 	// Update is called once per frame
@@ -82,9 +84,24 @@ public class PlayerMotor : NetworkBehaviour
     {
         if (lastShot >= shootDelay)
         {
+            GameObject lineObj = (GameObject) Instantiate(linePrefab);
+            LineRenderer lineRenderer = lineObj.GetComponent<LineRenderer>();
+
             lastShot = 0f;
             DebugConfig.print("Just shot a bullet!");
 
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Camera.main.transform.forward, out hit, range))
+            {
+                DebugConfig.print("I just hit a thing!");
+                lineRenderer.SetPosition(0, transform.position);
+                lineRenderer.SetPosition(1, hit.transform.position);
+            }
+            else
+            {
+                lineRenderer.SetPosition(0, transform.position);
+                lineRenderer.SetPosition(1, transform.TransformPoint(Camera.main.transform.forward * range));
+            }
             //CmdShoot(Camera.main.transform.forward, velocity);
         }
     }
