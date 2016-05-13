@@ -84,7 +84,8 @@ public class PlayerMotor : NetworkBehaviour
         {
             lastShot = 0f;
             DebugConfig.print("Just shot a bullet!");
-            CmdShoot(Camera.main.transform.forward, velocity);
+
+            //CmdShoot(Camera.main.transform.forward, velocity);
         }
     }
 

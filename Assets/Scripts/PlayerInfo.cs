@@ -3,8 +3,7 @@ using UnityEngine.Networking;
 
 public class PlayerInfo : NetworkBehaviour
 {
-    [SyncVar]
-    public Transform cameraTransform;
+
 
     public void Start()
     {
@@ -12,5 +11,6 @@ public class PlayerInfo : NetworkBehaviour
 
     public void Update()
     {
+
     }
 }
