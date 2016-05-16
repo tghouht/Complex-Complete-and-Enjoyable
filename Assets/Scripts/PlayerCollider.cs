@@ -31,12 +31,10 @@ public class PlayerCollider : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, -transform.up, 1f, groundLayer.value))
         {
-            //DebugConfig.print("Found raycast DOWN - " + groundLayer.ToString());
             playerMotor.isGrounded = true;
         }
         else
         {
-            //DebugConfig.print("No");
             playerMotor.isGrounded = false;
         }
     }
@@ -48,7 +46,7 @@ public class PlayerCollider : MonoBehaviour
         playerMotor.isTouching = true;
         playerMotor.collisionPoint = collision.contacts[0].point;
 
-        DebugConfig.print("OnCollisionStay true for - " + collision.gameObject.name);
+        Debug.Log("OnCollisionStay true for - " + collision.gameObject.name);
     }
 
     public void OnCollisionExit(Collision collision)
@@ -57,6 +55,6 @@ public class PlayerCollider : MonoBehaviour
 
         playerMotor.isTouching = false;
 
-        DebugConfig.print("OnCollisionExit true for - " + collision.gameObject.name);
+        Debug.Log("OnCollisionExit true for - " + collision.gameObject.name);
     }
 }

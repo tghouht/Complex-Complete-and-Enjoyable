@@ -16,7 +16,6 @@ public class PlayerController : NetworkBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        DebugConfig.isDebug = true;
 		playerMotor = GetComponent<PlayerMotor>();
 	}
 	
@@ -59,10 +58,5 @@ public class PlayerController : NetworkBehaviour
         float bodyRotation = yRot * lookSensitivity;
 
         playerMotor.Rotate(new Vector3(0f, bodyRotation, 0f));
-
-        /**
-        Shooting
-         */
-        if(Input.GetButton("Fire1")) playerMotor.Shoot();
 	}
 }

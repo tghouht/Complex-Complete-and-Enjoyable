@@ -14,7 +14,6 @@ public class PlayerMotor : NetworkBehaviour
     private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
-    private float lastShot = 0f;
     [NonSerialized]
     public Vector3 collisionPoint;
     [NonSerialized]
@@ -24,16 +23,6 @@ public class PlayerMotor : NetworkBehaviour
 
     [SerializeField]
     private float cameraRotMax = 85f;
-    [SerializeField]
-    private float shootDelay = 1f;
-    [SerializeField]
-    private float bulletStr = 5f;
-    [SerializeField]
-    private float range = 50f;
-    [SerializeField]
-    private GameObject bullet;
-    [SerializeField]
-    private GameObject linePrefab;
 
     private Rigidbody rigidbody;
 
@@ -46,7 +35,6 @@ public class PlayerMotor : NetworkBehaviour
 	// Update is called once per frame
 	public void FixedUpdate ()
     {
-        lastShot += Time.deltaTime;
         DoJump();
 		DoMovement();
         DoRotation();
@@ -67,7 +55,7 @@ public class PlayerMotor : NetworkBehaviour
         rotation = rot;
     }
 
-    //Called on server
+/*    //Called on server
     [Command]
     private void CmdShoot(Vector3 cam, Vector3 vel)
     {
@@ -78,33 +66,7 @@ public class PlayerMotor : NetworkBehaviour
             Physics.IgnoreCollision(bulletc.GetComponent<Collider>(), obj.transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
 
         NetworkServer.Spawn(bulletc);
-    }
-
-    public void Shoot()
-    {
-        if (lastShot >= shootDelay)
-        {
-            GameObject lineObj = (GameObject) Instantiate(linePrefab);
-            LineRenderer lineRenderer = lineObj.GetComponent<LineRenderer>();
-
-            lastShot = 0f;
-            DebugConfig.print("Just shot a bullet!");
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Camera.main.transform.forward, out hit, range))
-            {
-                DebugConfig.print("I just hit a thing!");
-                lineRenderer.SetPosition(0, transform.position);
-                lineRenderer.SetPosition(1, hit.transform.position);
-            }
-            else
-            {
-                lineRenderer.SetPosition(0, transform.position);
-                lineRenderer.SetPosition(1, transform.TransformPoint(Camera.main.transform.forward * range));
-            }
-            //CmdShoot(Camera.main.transform.forward, velocity);
-        }
-    }
+    }*/
 
     public void RotateCamera(float camRot)
     {

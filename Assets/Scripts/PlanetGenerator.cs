@@ -39,16 +39,12 @@ public class PlanetGenerator : NetworkBehaviour {
 
     private List<Transform> planets = new List<Transform>();
 
-    public override void OnStartClient() {
-    }
+    public override void OnStartServer ()
+    {
+        base.OnStartServer();
 
-    public void OnPlayerConnected(NetworkPlayer player) {
-    }
-
-    public override void OnStartServer () {
         //If no seed generate random one
-        if (seed == "")
-            seed = System.DateTime.Now.ToString();
+        seed = System.DateTime.Now.ToString();
 
         //Variable for replicatable randomness
         System.Random pseudo = new System.Random(seed.GetHashCode());
