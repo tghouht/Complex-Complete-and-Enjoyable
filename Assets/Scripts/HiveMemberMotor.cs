@@ -5,9 +5,10 @@ public class HiveMemberMotor : MonoBehaviour
 {
 	public static float speed = .1f;
 	public static float jumppower;
+	public float health;
 	public GameObject currenttarget;
 	public Rigidbody rigidbdy;
-	public CharacterController charactercontroller;
+	public GameObject bulletprefab;
 	public Vector3 currentdirection;
 	public float xmovecomponent;
 	public float ymovecomponent;
@@ -21,32 +22,44 @@ public class HiveMemberMotor : MonoBehaviour
 	void Update()
 	{
 		currentdirection = new Vector3 (xmovecomponent, ymovecomponent, zmovecomponent);
-		Idle ();
+		UpdateTarget();
+		if(currenttarget == null)
+		{
+			Idle();
+		}
+		else
+		{
+			MoveToward(currenttarget);
+			ShootAt(currenttarget);
+		}
+
 	}
 	void FixedUpdate()
 	{
 		//Move the hive member.
-		rigidbdy.MovePosition(transform.position + currentdirection * speed);
+		Vector3 localmove = transform.TransformDirection(currentdirection * speed * Time.fixedDeltaTime);
+		rigidbdy.MovePosition(transform.position + localmove);
 	}
 
-	public GameObject UpdateTarget()
+	public void UpdateTarget()
 	{
-		//get the closest player
-		//for(int i = 0; i < listofplayers.; i++)
-		//{
-		//	if (!currenttarget.Equals(null))
-		//	{
-				//if(Vector3.Distance(gameObject.transform.position, currenttarget.transform.position) < Vector3.Distance(gameObject.transform.position, listofplayers[i].transform.position))
-				//	currenttarget = (GameObject)listofplayers[i];
-		//	}
-		//}
-
-
-		//if there's a player that is attacking the enemy but further away, set that as target
-		//if there's another enemy already attacking an enemy and there's another player who is farther away but attacking
-		//
-		return(null);
-
+		//Get the closest player.
+		for(int iterator = 0; iterator < HiveController.listofplayers.Count; i++)
+		{
+			GameObject temporaryobject = HiveController.listplayers[iterator];
+			if(currenttarge == null)
+			{
+				//If close enough, set 
+				if(Vector3.Distance(temporaryobject.transform.position, gameObject.transform.position))
+				{
+					currenttarget = temporaryobject;
+				}
+			}
+			else if(Vector3.Distance(gameObject.transform.position, currenttarget.transform.position) < Vector3.Distance(gameObject.transform.position, temporaryobject.transform.position))
+			{
+					currenttarget = (GameObject)listofplayers[i];
+			}
+		}
 	}
 
 	//These methods are being used in order to determine an individual player's worth based on their current situation. The more worth, the more likely it is that the bot will attack the player.
@@ -63,7 +76,7 @@ public class HiveMemberMotor : MonoBehaviour
 	//These are the different kinds of movement that the hive member can do.
 	public void MoveToward(GameObject currentplayer)
 	{
-		Vector3 dir = currentplayer.transform.position - transform.position;
+		Vector3 dir = (currentplayer.transform.position - transform.position).normalized;
 		xmovecomponent = dir.x;
 		zmovecomponent = dir.z;
 	}
@@ -75,8 +88,14 @@ public class HiveMemberMotor : MonoBehaviour
 	{
 		if(Random.Range(1,100) == 1)
 		{
-			xmovecomponent = (int)Random.Range(-1,1);
-			zmovecomponent = (int)Random.Range(-1,1);
+			xmovecomponent = (int)Random.Range(-1,2);
+			zmovecomponent = (int)Random.Range(-1,2);
 		}
+		
+	}
+	public void ShootAt(GameObject target)
+	{
+		GameObject currentbullet = Instantiate(bulletprefab, gameObject.transform.position, gameObject.transform.rotation);
+		currentbullet.AddForce((target.transform.position - gameObject.transform.position).normalized);
 	}
 }

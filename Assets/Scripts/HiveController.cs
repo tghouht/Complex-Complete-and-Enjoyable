@@ -24,10 +24,8 @@ public class HiveController : MonoBehaviour
 
 	void Update()
 	{
-		//ad
 		UpdateListOfPlayers ();
 		UpdatePlayerBaseWorth();
-
 	}
 
 	public void UpdateListOfPlayers()
@@ -42,10 +40,4 @@ public class HiveController : MonoBehaviour
 			}
 		}
 	}
-
-	public void UpdatePlayerBaseWorth()
-	{
-		
-	}
-
 }
