@@ -44,10 +44,10 @@ public class HiveMemberMotor : MonoBehaviour
 	public void UpdateTarget()
 	{
 		//Get the closest player.
-		for(int iterator = 0; iterator < HiveController.listofplayers.Count; i++)
+		for(int iterator = 0; iterator < HiveController.listofplayers.Count; iterator++)
 		{
-			GameObject temporaryobject = HiveController.listplayers[iterator];
-			if(currenttarge == null)
+			GameObject temporaryobject = HiveController.listofplayers[iterator];
+			if(currenttarget == null)
 			{
 				//If close enough, set 
 				if(Vector3.Distance(temporaryobject.transform.position, gameObject.transform.position))
@@ -57,7 +57,7 @@ public class HiveMemberMotor : MonoBehaviour
 			}
 			else if(Vector3.Distance(gameObject.transform.position, currenttarget.transform.position) < Vector3.Distance(gameObject.transform.position, temporaryobject.transform.position))
 			{
-					currenttarget = (GameObject)listofplayers[i];
+				currenttarget = (GameObject)HiveController.listofplayers[iterator];
 			}
 		}
 	}
@@ -91,11 +91,11 @@ public class HiveMemberMotor : MonoBehaviour
 			xmovecomponent = (int)Random.Range(-1,2);
 			zmovecomponent = (int)Random.Range(-1,2);
 		}
-		
+
 	}
 	public void ShootAt(GameObject target)
 	{
 		GameObject currentbullet = Instantiate(bulletprefab, gameObject.transform.position, gameObject.transform.rotation);
-		currentbullet.AddForce((target.transform.position - gameObject.transform.position).normalized);
+		currentbullet.GetComponent<Rigidbody>().AddForce((target.transform.position - gameObject.transform.position).normalized);
 	}
 }

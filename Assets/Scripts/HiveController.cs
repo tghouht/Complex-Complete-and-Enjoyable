@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HiveController : MonoBehaviour
 {
-	
+
 	public GameObject hivememberprefab;
 
 	public static int numhivemembers = 5;
@@ -12,7 +12,7 @@ public class HiveController : MonoBehaviour
 
 	void Start()
 	{
-		
+
 		//spawn the hive members
 		for(int iterator = 0; iterator < numhivemembers; iterator++)
 		{
@@ -25,7 +25,6 @@ public class HiveController : MonoBehaviour
 	void Update()
 	{
 		UpdateListOfPlayers ();
-		UpdatePlayerBaseWorth();
 	}
 
 	public void UpdateListOfPlayers()

@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+<<<<<<< HEAD
+=======
+using UnityEngine.Networking;
+>>>>>>> 76c1c2787fe7de8e1913343ab88fd4c6bb8d905d
 using System;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerMotor : MonoBehaviour
+public class PlayerMotor : NetworkBehaviour
 {
 
     [SerializeField]
@@ -13,12 +17,20 @@ public class PlayerMotor : MonoBehaviour
     private Vector3 currentJump;
     private float activeCameraRot;
     private float currentCameraRot;
+<<<<<<< HEAD
     private float lastShot = 0f;
     //[NonSerialized]
     public Vector3 collisionPoint;
     //[NonSerialized]
     public bool isTouching;
     //[NonSerialized]
+=======
+    [NonSerialized]
+    public Vector3 collisionPoint;
+    [NonSerialized]
+    public bool isTouching;
+    [NonSerialized]
+>>>>>>> 76c1c2787fe7de8e1913343ab88fd4c6bb8d905d
     public bool isGrounded;
 
     [SerializeField]
@@ -58,6 +70,7 @@ public class PlayerMotor : MonoBehaviour
         rotation = rot;
     }
 
+<<<<<<< HEAD
     public void Shoot()
     {
         if (lastShot >= shootDelay)
@@ -66,6 +79,20 @@ public class PlayerMotor : MonoBehaviour
             DebugConfig.print("Just shot a bullet!");
         }
     }
+=======
+/*    //Called on server
+    [Command]
+    private void CmdShoot(Vector3 cam, Vector3 vel)
+    {
+        GameObject bulletc = (GameObject) Instantiate(bullet, transform.position, Quaternion.identity);
+        bulletc.GetComponent<Rigidbody>().velocity = cam * bulletStr + vel;
+
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
+            Physics.IgnoreCollision(bulletc.GetComponent<Collider>(), obj.transform.GetComponent<Collider>()); //Ignores collisions between bullet and player
+
+        NetworkServer.Spawn(bulletc);
+    }*/
+>>>>>>> 76c1c2787fe7de8e1913343ab88fd4c6bb8d905d
 
     public void RotateCamera(float camRot)
     {
@@ -102,7 +129,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void DoRotation()
     {
-		rigidbody.MoveRotation(rigidbody.rotation * Quaternion.Euler(rotation));
+		transform.Rotate(rotation);
 
         if (camera != null)
         {
@@ -110,6 +137,7 @@ public class PlayerMotor : MonoBehaviour
             currentCameraRot = Mathf.Clamp(currentCameraRot, -cameraRotMax, cameraRotMax);
 
             camera.transform.localEulerAngles = new Vector3(currentCameraRot, 0, 0);
+            //playerInfo.cameraTransform = camera.transform;
         }
     }
 }

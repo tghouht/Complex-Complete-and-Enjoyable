@@ -1,5 +1,8 @@
 using UnityEngine;
+<<<<<<< HEAD
 using UnityEditor;
+=======
+>>>>>>> 76c1c2787fe7de8e1913343ab88fd4c6bb8d905d
 
 public class PlayerCrosshair : MonoBehaviour
 {

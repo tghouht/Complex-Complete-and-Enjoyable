@@ -5,8 +5,12 @@ public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField]
     Behaviour[] disabledComponents;
+    [SerializeField]
+    string remoteLayer;
 
     Camera sceneCamera;
+
+    private PlayerManager playerManager;
 
     void Start ()
     {
@@ -16,6 +20,8 @@ public class PlayerSetup : NetworkBehaviour
             {
                 behaviour.enabled = false;
             }
+
+            RemoteLayerAdd();
         }
         else
         {
@@ -26,6 +32,14 @@ public class PlayerSetup : NetworkBehaviour
                 sceneCamera.gameObject.SetActive(false);
             }
         }
+
+        gameObject.name = "Player " + GetComponent<NetworkIdentity>().netId;
+        playerManager.Setup();
+    }
+
+    void RemoteLayerAdd()
+    {
+        gameObject.layer = LayerMask.NameToLayer(remoteLayer);
     }
 
     void Update()
@@ -35,9 +49,31 @@ public class PlayerSetup : NetworkBehaviour
 
     void OnDisable()
     {
+        //sceneCamera is null for !isLocalPlayer, never set in Start() method
         if (sceneCamera != null)
         {
             sceneCamera.gameObject.SetActive(true);
         }
+
+        if (isLocalPlayer)
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+        GameManager.UnRegisterPlayer(transform.name);
+
+        //Debug.Log(transform.name + "'s setup script has just been disabled w/ camera=" + sceneCamera.gameObject.active);
+    }
+
+    /**
+    Will be called before Start(), so don't use transform.name for Network ID
+     */
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        playerManager = GetComponent<PlayerManager>();
+
+        GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), playerManager);
     }
 }

@@ -1,0 +1,21 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class HiveMemberShoot : MonoBehaviour
+{
+	
+	void Start ()
+	{
+	
+	}
+
+	void Update ()
+	{
+		RaycastHit hit;
+		if(gameObject.GetComponent<HiveMemberMotor>().currenttarget != null && Physics.Raycast(gameObject.transform.position, (gameObject.transform.position - gameObject.GetComponent<HiveMemberMotor>().currenttarget.transform.position).normalized, hit))
+		{
+			if(hit.transform.tag.CompareTo("Player") || hit.transform.tag.CompareTo("HiveMember"))
+				Shoot();
+		}
+	}
+}
