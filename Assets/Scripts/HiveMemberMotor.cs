@@ -30,6 +30,7 @@ public class HiveMemberMotor : MonoBehaviour
 		{
 			MoveToward(currenttarget);
 			GetComponent<HiveMemberShoot>().Shoot(currenttarget);
+
 		}
 
 	}

@@ -17,10 +17,9 @@ public class HiveMemberShoot : MonoBehaviour
 		{
 			if(hit.transform.tag.Equals("Player") || hit.transform.tag.Equals("HiveMember"))
 			{
-				
+				hit.transform.gameObject.GetComponent<PlayerShoot>().CmdGotShot(hit.transform.name,5);
 			}
 				//...shoot.
-				//hit.transform.gameObject.GetComponent<>()
 		}
 	}
 }
