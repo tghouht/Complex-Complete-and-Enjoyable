@@ -26,6 +26,8 @@ public class PlayerMotor : NetworkBehaviour
     public bool isTouching;
     [NonSerialized]
     public bool isGrounded;
+    [NonSerialized]
+    public bool jetPackEnabled;
 
     [SerializeField]
     private float cameraRotMax = 85f;
@@ -33,11 +35,13 @@ public class PlayerMotor : NetworkBehaviour
     private float cameraRotMin = -20f;
 
     private Rigidbody rigidbody;
+    private PlayerGravity playerGravity;
 
 	// Use this for initialization
 	public void Start ()
     {
 		rigidbody = GetComponent<Rigidbody>();
+        playerGravity = GetComponent<PlayerGravity>();
 	}
 	
 	// Update is called once per frame
@@ -106,6 +110,15 @@ public class PlayerMotor : NetworkBehaviour
             Vector3 movement = transform.position + velocity * Time.fixedDeltaTime;
 
             rigidbody.MovePosition(movement);
+
+//            if (jetPackEnabled)
+//            {
+//                rigidbody.drag = 100f;
+//            }
+//            else
+//            {
+//                rigidbody.drag = 0f;
+//            }
         }
 
         animator.SetBool("IsRun", velocity != Vector3.zero);

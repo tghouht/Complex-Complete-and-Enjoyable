@@ -7,26 +7,57 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float speed = 5f;
     [SerializeField]
+    private float jetPackScalingFactor = 2f;
+    [SerializeField]
     private float lookSensitivity = 3f;
     [SerializeField]
     private float jumpPower = 100f;
+    [SerializeField]
+    private float superJumpPower = 1000f;
+    private float jumpCounter = 0;
 
     private PlayerMotor playerMotor;
+    private PlayerGravity playerGravity;
 
 	// Use this for initialization
 	void Start ()
     {
 		playerMotor = GetComponent<PlayerMotor>();
+        playerGravity = GetComponent<PlayerGravity>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
         /**
-        Jumping
+        Jumping and jetpack
          */
-        bool jump = Input.GetButtonDown("Jump") && playerMotor.isGrounded;
-        playerMotor.Jump(jump ? transform.up * jumpPower : Vector3.zero);
+        if (Input.GetButtonDown("Jump") && jumpCounter < 1)
+        {
+            playerMotor.Jump(transform.up * jumpPower);
+            jumpCounter++;
+            print("has jumped counter=" + jumpCounter);
+        }
+        else if (Input.GetButtonDown("Jump") && jumpCounter == 1)
+        {
+            //playerMotor.jetPackEnabled = true;
+            //print("Jetpack enabled! counter=" + jumpCounter);
+            playerMotor.Jump(transform.up * superJumpPower);
+            jumpCounter++;
+        }
+        else
+        {
+            playerMotor.Jump(Vector3.zero);
+        }
+
+        if (playerMotor.isGrounded) jumpCounter = 0;
+
+//        if (Input.GetKeyDown(KeyCode.J))
+//        {
+//            playerMotor.jetPackEnabled = false;
+//            jumpCounter = 0;
+//            print("Jetpack disabled!");
+//        }
 
         /**
         Movement
@@ -35,7 +66,7 @@ public class PlayerController : NetworkBehaviour
         float zMov = Input.GetAxisRaw("Vertical");
 
         Vector3 horiMove = transform.right * xMov;
-        Vector3 vertMove = transform.forward * zMov;
+        Vector3 vertMove = (transform.forward) * zMov;
 
         Vector3 velocity = (horiMove + vertMove).normalized * speed;
 

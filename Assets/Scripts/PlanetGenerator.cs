@@ -37,6 +37,9 @@ public class PlanetGenerator : NetworkBehaviour {
     [SerializeField]
     private GameObject planetParent;
 
+    [SerializeField]
+    private GameObject block;
+
     private List<Transform> planets = new List<Transform>();
 
     public override void OnStartServer ()
@@ -54,8 +57,8 @@ public class PlanetGenerator : NetworkBehaviour {
 
         for (int i = 0;i < numofPlanets;i++) {
             //Sets variables
-            float density = (float)pseudo.NextDouble() * (maxDensityofPlanets - minDensityofPlanets) + minDensityofPlanets;
-            float scale = (float)pseudo.NextDouble() * (maxSizeofPlanets - minSizeofPlanets) + minSizeofPlanets;
+            float density = (float) pseudo.NextDouble() * (maxDensityofPlanets - minDensityofPlanets) + minDensityofPlanets;
+            float scale = (float) pseudo.NextDouble() * (maxSizeofPlanets - minSizeofPlanets) + minSizeofPlanets;
 
             Vector3 currentPosition = Vector3.zero;
             int numTries = 0;
@@ -64,9 +67,9 @@ public class PlanetGenerator : NetworkBehaviour {
             while (numTries < maxSpawnAttempts) {
                 numTries++;
                 //Generates Random Coordniate to attempt to spawn
-                float x = (float)pseudo.NextDouble() * 2f * worldX - worldX;
-                float y = (float)pseudo.NextDouble() * 2f * worldY - worldY;
-                float z = (float)pseudo.NextDouble() * 2f * worldZ - worldZ;
+                float x = (float) pseudo.NextDouble() * 2f * worldX - worldX;
+                float y = (float) pseudo.NextDouble() * 2f * worldY - worldY;
+                float z = (float) pseudo.NextDouble() * 2f * worldZ - worldZ;
                 currentPosition = new Vector3(x, y, z);
 
                 if (i != 0) {
@@ -87,6 +90,11 @@ public class PlanetGenerator : NetworkBehaviour {
             }
 
             GameObject planetGO = (GameObject)Instantiate(planetPrefab, currentPosition, transform.rotation);
+            GameObject blockGO = (GameObject) Instantiate(block);
+            float rand1 = Random.Range(0, 2 * Mathf.PI);
+            float rand2 = Random.Range(0, 2 * Mathf.PI);
+            blockGO.transform.position = new Vector3(currentPosition.x + (scale - 2f) * Mathf.Sin(rand1) * Mathf.Cos(rand2), currentPosition.y + (scale - 2f) * Mathf.Sin(rand1) * Mathf.Sin(rand2), currentPosition.z + (scale - 2f) * Mathf.Cos(rand1));
+
             planets.Add(planetGO.transform);
             planetGO.transform.SetParent(transform);
 
@@ -97,6 +105,7 @@ public class PlanetGenerator : NetworkBehaviour {
             planetSC.scale = scale;
 
             NetworkServer.Spawn(planetGO);
+            NetworkServer.Spawn(blockGO);
         }
     }
 }

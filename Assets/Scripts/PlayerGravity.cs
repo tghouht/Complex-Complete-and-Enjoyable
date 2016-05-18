@@ -7,13 +7,19 @@ public class PlayerGravity : MonoBehaviour {
 
 	[HideInInspector]
 	public List<PlanetGravity> nearPlanets = new List<PlanetGravity>();
+    //	[HideInInspector]
+    public bool inSpace;
 
 	Rigidbody bodyrigid;
+    PlayerMotor motor;
+
     [SerializeField]
 	private LayerMask ground;
 	
-	void Start(){
+	void Start()
+    {
 		bodyrigid = GetComponent<Rigidbody> ();
+        motor = GetComponent<PlayerMotor>();
 		bodyrigid.useGravity = false;
 		bodyrigid.constraints = RigidbodyConstraints.FreezeRotation;
 	}
@@ -23,9 +29,10 @@ public class PlayerGravity : MonoBehaviour {
 			return;
 		
 		Transform nearestPlanet = null;
-		float smallestDistance = int.MaxValue;
+		float smallestDistance = (float) int.MaxValue;
+        PlanetGravity nearestPlanet0 = null;
 		Vector3 force = Vector3.zero;
-		foreach (PlanetGravity planet in nearPlanets){
+		foreach (PlanetGravity planet in nearPlanets) {
 			//Gets gravity vector of planet
 			force += planet.GetGravityForce(bodyrigid);
 
@@ -37,15 +44,31 @@ public class PlayerGravity : MonoBehaviour {
 			if(ray.distance < smallestDistance){
 				smallestDistance = ray.distance;
 				nearestPlanet = planet.transform;
+                nearestPlanet0 = planet;
 			}
 		}
 
-		//Angles player towards nearest Planet
-		Vector3 gravityUp = (transform.position - nearestPlanet.position).normalized;
-		Quaternion rotation = Quaternion.FromToRotation(transform.up,gravityUp) * transform.rotation;
-		transform.rotation = Quaternion.Lerp(transform.rotation,rotation,Time.fixedDeltaTime * 2f);
 
-		//Applies Gravity
-		bodyrigid.AddForce(force);
+        //Angles player towards nearest Planet
+        Vector3 gravityUp = (transform.position - nearestPlanet.position).normalized;
+        Quaternion rotation = Quaternion.FromToRotation(transform.up,gravityUp) * transform.rotation;
+        transform.rotation = Quaternion.Lerp(transform.rotation,rotation,Time.fixedDeltaTime * 2f);
+
+
+		bodyrigid.AddForce(minimizeForce(force));
 	}
+
+    private Vector3 minimizeForce(Vector3 force)
+    {
+        if (force.magnitude / bodyrigid.mass >= 1f)
+        {
+            minimizeForce(force / 2f);
+        }
+        else
+        {
+            return force;
+        }
+
+        return force;
+    }
 }
