@@ -5,12 +5,12 @@ public class GravityWell : MonoBehaviour {
 
 	//Add PlanetGravity script to PlayerGravity nearPlanets list
 	void OnTriggerEnter(Collider obj){
-		if (obj.tag == "Player")
+		if (obj.tag == "Player" || obj.tag == "HiveMember")
 			obj.GetComponent<PlayerGravity>().nearPlanets.Add(transform.GetComponentInParent<PlanetGravity>());
 		
 	}
 	void OnTriggerExit(Collider obj){
-		if (obj.tag == "Player")
+		if (obj.tag == "Player" || obj.tag == "HiveMember")
 			obj.GetComponent<PlayerGravity>().nearPlanets.Remove(transform.GetComponentInParent<PlanetGravity>());
 	}
 }
