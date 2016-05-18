@@ -72,7 +72,7 @@ public class PlayerManager : NetworkBehaviour
             disableDeath[i].enabled = wasEnabled[i];
         }
 
-        GetComponent<Collider>().enabled = true;
+        //GetComponent<Collider>().enabled = true;
     }
 
     private void Die()
@@ -83,7 +83,7 @@ public class PlayerManager : NetworkBehaviour
             disableDeath[i].enabled = false;
         }
 
-        GetComponent<Collider>().enabled = false;
+        //GetComponent<Collider>().enabled = false;
 
         Debug.Log(transform.name + "is now dead.");
 

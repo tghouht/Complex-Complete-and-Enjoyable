@@ -29,6 +29,18 @@ public class PlayerController : NetworkBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        if (!PlayerCrosshair.mouseLocked)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                PlayerCrosshair.mouseLocked = true;
+            }
+
+            return;
+        }
+
         /**
         Jumping and jetpack
          */
