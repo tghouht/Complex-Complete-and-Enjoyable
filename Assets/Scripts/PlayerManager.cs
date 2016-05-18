@@ -75,7 +75,7 @@ public class PlayerManager : NetworkBehaviour
         //GetComponent<Collider>().enabled = true;
     }
 
-    private void Die()
+    public void Die()
     {
         isDead = true;
         for (int i = 0; i < disableDeath.Length; i++)
