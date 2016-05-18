@@ -12,6 +12,8 @@ public class PlayerMotor : NetworkBehaviour
     private Transform weapon;
     [SerializeField]
     private Transform pivot;
+    [SerializeField]
+    private Animator animator;
 
     private Vector3 velocity;
     private Vector3 rotation;
@@ -105,6 +107,8 @@ public class PlayerMotor : NetworkBehaviour
 
             rigidbody.MovePosition(movement);
         }
+
+        animator.SetBool("IsRun", velocity != Vector3.zero);
     }
 
     private void DoRotation()
