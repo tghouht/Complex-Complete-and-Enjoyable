@@ -36,7 +36,7 @@ public class PlayerController : NetworkBehaviour
         /**
         Jumping and jetpack
          */
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && playerMotor.isGrounded)
         {
             playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * jumpPower : Vector3.zero);
         }
