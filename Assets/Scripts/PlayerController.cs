@@ -25,28 +25,16 @@ public class PlayerController : NetworkBehaviour
 		playerMotor = GetComponent<PlayerMotor>();
         playerGravity = GetComponent<PlayerGravity>();
 	}
-	
+
 	// Update is called once per frame
-	void FixedUpdate ()
+	void Update ()
     {
-        if (!PlayerCrosshair.mouseLocked)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                PlayerCrosshair.mouseLocked = true;
-            }
-
-            return;
-        }
-
         /**
         Jumping and jetpack
          */
         if (Input.GetButtonDown("Jump") && jumpCounter < 1)
         {
-            playerMotor.Jump(transform.up * jumpPower);
+            playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * jumpPower : Vector3.zero);
             jumpCounter++;
             print("has jumped counter=" + jumpCounter);
         }
@@ -54,7 +42,7 @@ public class PlayerController : NetworkBehaviour
         {
             //playerMotor.jetPackEnabled = true;
             //print("Jetpack enabled! counter=" + jumpCounter);
-            playerMotor.Jump(transform.up * superJumpPower);
+            playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * superJumpPower : Vector3.zero);
             jumpCounter++;
         }
         else
@@ -82,7 +70,7 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 velocity = (horiMove + vertMove).normalized * speed;
 
-        playerMotor.Move(velocity);
+        playerMotor.Move(PlayerCrosshair.mouseLocked ? velocity : Vector3.zero);
 
         /**
         Rotation for camera
@@ -91,7 +79,7 @@ public class PlayerController : NetworkBehaviour
 
         float cameraRotation = xRot * lookSensitivity;
 
-        playerMotor.RotateCamera(cameraRotation);
+        playerMotor.RotateCamera(PlayerCrosshair.mouseLocked ? cameraRotation : 0f);
 
         /**
         Rotation for player
@@ -100,6 +88,6 @@ public class PlayerController : NetworkBehaviour
 
         float bodyRotation = yRot * lookSensitivity;
 
-        playerMotor.Rotate(new Vector3(0f, bodyRotation, 0f));
+        playerMotor.Rotate(new Vector3(0f, PlayerCrosshair.mouseLocked ? bodyRotation : 0f, 0f));
 	}
 }

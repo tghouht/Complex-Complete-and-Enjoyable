@@ -20,9 +20,9 @@ public class PlayerCrosshair : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            mouseLocked = false;
+            Cursor.visible = !Cursor.visible;
+            Cursor.lockState = (mouseLocked ? CursorLockMode.None : CursorLockMode.Locked);
+            mouseLocked = !mouseLocked;
         }
     }
 
