@@ -8,6 +8,10 @@ public class PlayerMotor : NetworkBehaviour
 
     [SerializeField]
     private Camera camera;
+    [SerializeField]
+    private Transform weapon;
+    [SerializeField]
+    private Transform pivot;
 
     private Vector3 velocity;
     private Vector3 rotation;
@@ -23,6 +27,8 @@ public class PlayerMotor : NetworkBehaviour
 
     [SerializeField]
     private float cameraRotMax = 85f;
+    [SerializeField]
+    private float cameraRotMin = -20f;
 
     private Rigidbody rigidbody;
 
@@ -108,10 +114,16 @@ public class PlayerMotor : NetworkBehaviour
         if (camera != null)
         {
 			currentCameraRot -= activeCameraRot;
-            currentCameraRot = Mathf.Clamp(currentCameraRot, -cameraRotMax, cameraRotMax);
+            currentCameraRot = Mathf.Clamp(currentCameraRot, cameraRotMin, cameraRotMax);
 
             camera.transform.localEulerAngles = new Vector3(currentCameraRot, 0, 0);
+            weapon.localEulerAngles = new Vector3(currentCameraRot, 0, 0);
             //playerInfo.cameraTransform = camera.transform;
         }
+    }
+
+    private bool bounds(float a, float b1, float b2)
+    {
+        return a >= b1 - Mathf.Epsilon && a <= b2 + Mathf.Epsilon;
     }
 }

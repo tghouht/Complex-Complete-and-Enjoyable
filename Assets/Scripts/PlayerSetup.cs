@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class PlayerSetup : NetworkBehaviour
 {
@@ -57,7 +58,7 @@ public class PlayerSetup : NetworkBehaviour
 
         if (isLocalPlayer)
         {
-            Application.LoadLevel(Application.loadedLevel);
+            SceneManager.LoadScene(0);
         }
 
         GameManager.UnRegisterPlayer(transform.name);
