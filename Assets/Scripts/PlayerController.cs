@@ -14,7 +14,10 @@ public class PlayerController : NetworkBehaviour
     private float jumpPower = 100f;
     [SerializeField]
     private float superJumpPower = 1000f;
-    private float jumpCounter = 0;
+
+    [SerializeField]
+    private float timeLapseSuper = 3f;
+    private float superDuration;
 
     private PlayerMotor playerMotor;
     private PlayerGravity playerGravity;
@@ -24,6 +27,7 @@ public class PlayerController : NetworkBehaviour
     {
 		playerMotor = GetComponent<PlayerMotor>();
         playerGravity = GetComponent<PlayerGravity>();
+        superDuration = timeLapseSuper;
 	}
 
 	// Update is called once per frame
@@ -32,25 +36,29 @@ public class PlayerController : NetworkBehaviour
         /**
         Jumping and jetpack
          */
-        if (Input.GetButtonDown("Jump") && jumpCounter < 1)
+        if (Input.GetButtonDown("Jump"))
         {
             playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * jumpPower : Vector3.zero);
-            jumpCounter++;
-            print("has jumped counter=" + jumpCounter);
-        }
-        else if (Input.GetButtonDown("Jump") && jumpCounter == 1)
-        {
-            //playerMotor.jetPackEnabled = true;
-            //print("Jetpack enabled! counter=" + jumpCounter);
-            playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * superJumpPower : Vector3.zero);
-            jumpCounter++;
         }
         else
         {
             playerMotor.Jump(Vector3.zero);
         }
 
-        if (playerMotor.isGrounded) jumpCounter = 0;
+        if (Input.GetButton("Jump"))
+        {
+            superDuration -= Time.deltaTime;
+
+            if (superDuration <= 0f)
+            {
+                playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * superJumpPower : Vector3.zero);
+                superDuration = timeLapseSuper;
+            }
+        }
+        else
+        {
+            superDuration = timeLapseSuper;
+        }
 
 //        if (Input.GetKeyDown(KeyCode.J))
 //        {
