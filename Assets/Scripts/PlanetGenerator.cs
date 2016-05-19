@@ -40,11 +40,19 @@ public class PlanetGenerator : NetworkBehaviour {
     [SerializeField]
     private GameObject block;
 
+    [SerializeField]
+    private Transform[] spawnPoints;
+
     private List<Transform> planets = new List<Transform>();
 
     public override void OnStartServer ()
     {
         base.OnStartServer();
+
+        for (int i = 0; i < 4; i++)
+        {
+            spawnPoints[i] = GameObject.Find("Spawnpoint" + (i + 1)).transform;
+        }
 
         //If no seed generate random one
         seed = System.DateTime.Now.ToString();
@@ -90,10 +98,10 @@ public class PlanetGenerator : NetworkBehaviour {
             }
 
             GameObject planetGO = (GameObject)Instantiate(planetPrefab, currentPosition, transform.rotation);
-            GameObject blockGO = (GameObject) Instantiate(block);
+            //GameObject blockGO = (GameObject) Instantiate(block);
             float rand1 = Random.Range(0, 2 * Mathf.PI);
             float rand2 = Random.Range(0, 2 * Mathf.PI);
-            blockGO.transform.position = new Vector3(currentPosition.x + (scale - 2f) * Mathf.Sin(rand1) * Mathf.Cos(rand2), currentPosition.y + (scale - 2f) * Mathf.Sin(rand1) * Mathf.Sin(rand2), currentPosition.z + (scale - 2f) * Mathf.Cos(rand1));
+            //blockGO.transform.position = new Vector3(currentPosition.x + (scale - 2f) * Mathf.Sin(rand1) * Mathf.Cos(rand2), currentPosition.y + (scale - 2f) * Mathf.Sin(rand1) * Mathf.Sin(rand2), currentPosition.z + (scale - 2f) * Mathf.Cos(rand1));
 
             planets.Add(planetGO.transform);
             planetGO.transform.SetParent(transform);
@@ -105,7 +113,16 @@ public class PlanetGenerator : NetworkBehaviour {
             planetSC.scale = scale;
 
             NetworkServer.Spawn(planetGO);
-            NetworkServer.Spawn(blockGO);
+            //NetworkServer.Spawn(blockGO);
+        }
+
+        print(planets.Count);
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            if (i >= planets.Count) break;
+            spawnPoints[i].position = planets[i].position + new Vector3(Mathf.Sqrt(1f/3f), -Mathf.Sqrt(1f/3f), Mathf.Sqrt(1f/3f)) * (planets[i].GetComponent<PlanetGravity>().scale);
+            //print(planets[i].GetComponent<PlanetGravity>().scale);
+            //Debug.Log((spawnPoints[i].position - planets[i].position).magnitude);
         }
     }
 }
