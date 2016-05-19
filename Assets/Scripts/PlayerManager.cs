@@ -21,6 +21,8 @@ public class PlayerManager : NetworkBehaviour
     public GUIBarScript livesBar;
     [SerializeField]
     public GUIBarScript healthBar;
+    [SerializeField]
+    public Health health1;
 
     private bool[] wasEnabled;
 
@@ -45,6 +47,7 @@ public class PlayerManager : NetworkBehaviour
 
         livesBar.Value = 0.2f * lives;
         healthBar.Value = health / 100f;
+        health1.health = health;
     }
 
     public void Setup (PlayerSetup playerSetup)

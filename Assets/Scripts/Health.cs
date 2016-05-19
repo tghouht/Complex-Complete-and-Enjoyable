@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Health : MonoBehaviour {
-
 	public float MaxHealth = 100f;
 	public float health = 0f;
 	public GameObject HealthBar;
@@ -17,8 +16,8 @@ public class Health : MonoBehaviour {
 	void Update () {
 		
 	}
-	void decreaseHealth(){
-		health -= 23;
+	void decreaseHealth()
+    {
 		float calcHealth = health / MaxHealth;
 		SetHealthBar (calcHealth);
 	}
