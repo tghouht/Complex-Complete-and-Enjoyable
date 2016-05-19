@@ -19,7 +19,7 @@ public class Deathbox : MonoBehaviour
     {
         if (collider.tag.Equals("Player") && collider.gameObject.GetComponent<NetworkIdentity>().isLocalPlayer)
         {
-            collider.GetComponent<PlayerManager>().Die();
+            collider.transform.parent.GetComponent<PlayerManager>().Die();
             Debug.Log(collider.name + " has run into the deathbox!");
             //collider.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
