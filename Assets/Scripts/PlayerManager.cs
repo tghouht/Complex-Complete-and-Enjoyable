@@ -18,9 +18,9 @@ public class PlayerManager : NetworkBehaviour
     private Behaviour[] disableDeath;
 
     [SerializeField]
-    private GUIBarScript livesBar;
+    public GUIBarScript livesBar;
     [SerializeField]
-    private GUIBarScript healthBar;
+    public GUIBarScript healthBar;
 
     private bool[] wasEnabled;
 

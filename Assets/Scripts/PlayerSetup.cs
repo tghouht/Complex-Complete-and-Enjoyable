@@ -19,12 +19,17 @@ public class PlayerSetup : NetworkBehaviour
 
     void Start ()
     {
+        gameObject.name = "Player " + GetComponent<NetworkIdentity>().netId;
+        playerManager.Setup(this);
+
         if (!isLocalPlayer)
         {
             foreach (Behaviour behaviour in disabledComponents)
             {
                 behaviour.enabled = false;
             }
+            playerManager.livesBar.gameObject.SetActive(false);
+            playerManager.healthBar.gameObject.SetActive(false);
 
             RemoteLayerAdd();
         }
@@ -37,9 +42,6 @@ public class PlayerSetup : NetworkBehaviour
                 sceneCamera.gameObject.SetActive(false);
             }
         }
-
-        gameObject.name = "Player " + GetComponent<NetworkIdentity>().netId;
-        playerManager.Setup(this);
     }
 
     void RemoteLayerAdd()
