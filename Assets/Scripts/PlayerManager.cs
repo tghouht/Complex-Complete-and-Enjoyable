@@ -17,12 +17,21 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField]
     private Behaviour[] disableDeath;
 
+    [SerializeField]
+    private GUIBarScript livesBar;
+    [SerializeField]
+    private GUIBarScript healthBar;
+
     private bool[] wasEnabled;
 
     private bool dragged;
 
     [SyncVar]
     private float health;
+    [SyncVar]
+    private float lives;
+
+    private PlayerSetup playerSetup;
 
     public void FixedUpdate()
     {
@@ -33,10 +42,15 @@ public class PlayerManager : NetworkBehaviour
             GetComponent<Rigidbody>().drag = 0;
             dragged = false;
         }
+
+        livesBar.Value = 0.2f * lives;
+        healthBar.Value = health / 100f;
     }
 
-    public void Setup ()
+    public void Setup (PlayerSetup playerSetup)
     {
+        this.playerSetup = playerSetup;
+
         wasEnabled = new bool[disableDeath.Length];
         for (int i = 0; i < wasEnabled.Length; i++)
         {
@@ -44,6 +58,7 @@ public class PlayerManager : NetworkBehaviour
         }
 
         SetupVars();
+        lives = 2f;
     }
 
     [ClientRpc]
@@ -65,16 +80,23 @@ public class PlayerManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(GameManager.instance.gameSettings.respawnTime);
 
-        SetupVars();
+        if (lives <= 0f)
+        {
+            playerSetup.HasPermDeathed();
+        }
+        else
+        {
+            SetupVars();
 
-        Transform spawn = NetworkManager.singleton.GetStartPosition();
-        transform.position = spawn.position;
-        transform.rotation = spawn.rotation;
+            Transform spawn = NetworkManager.singleton.GetStartPosition();
+            transform.position = spawn.position;
+            transform.rotation = spawn.rotation;
 
-        GetComponent<Rigidbody>().drag = 100f;
-        dragged = true;
+            GetComponent<Rigidbody>().drag = 100f;
+            dragged = true;
 
-        Debug.Log(transform.name + " has respawned after " + GameManager.instance.gameSettings.respawnTime + " seconds.");
+            Debug.Log(transform.name + " has respawned after " + GameManager.instance.gameSettings.respawnTime + " seconds.");
+        }
     }
 
     //Call this on respawn
@@ -102,6 +124,7 @@ public class PlayerManager : NetworkBehaviour
         //GetComponent<Collider>().enabled = false;
 
         Debug.Log(transform.name + "is now dead.");
+        lives--;
 
         StartCoroutine(Respawn());
     }
@@ -109,18 +132,5 @@ public class PlayerManager : NetworkBehaviour
     public float getHealth()
     {
         return health;
-    }
-
-    void OnGUI()
-    {
-        if (!(isDead && isLocalPlayer)) return;
-
-        GUILayout.BeginArea(new Rect(200, 200, 200, 500));
-        GUILayout.BeginVertical();
-
-        GUILayout.Label("You have died!");
-
-        GUILayout.EndVertical();
-        GUILayout.EndArea();
     }
 }

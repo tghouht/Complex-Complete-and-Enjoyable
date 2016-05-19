@@ -7,9 +7,13 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField]
     Behaviour[] disabledComponents;
     [SerializeField]
+    public GameObject graphicals;
+    [SerializeField]
     string remoteLayer;
 
     Camera sceneCamera;
+    [SerializeField]
+    Camera playerCamera;
 
     private PlayerManager playerManager;
 
@@ -35,7 +39,7 @@ public class PlayerSetup : NetworkBehaviour
         }
 
         gameObject.name = "Player " + GetComponent<NetworkIdentity>().netId;
-        playerManager.Setup();
+        playerManager.Setup(this);
     }
 
     void RemoteLayerAdd()
@@ -46,6 +50,14 @@ public class PlayerSetup : NetworkBehaviour
     void Update()
     {
 
+    }
+
+    public void HasPermDeathed()
+    {
+        Debug.Log(transform.name + " has permanently died!");
+        playerCamera.gameObject.SetActive(false);
+        sceneCamera.gameObject.SetActive(true);
+        graphicals.SetActive(false);
     }
 
     void OnDisable()
