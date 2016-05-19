@@ -120,7 +120,7 @@ public class PlanetGenerator : NetworkBehaviour {
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             if (i >= planets.Count) break;
-            spawnPoints[i].position = planets[i].position + new Vector3(Mathf.Sqrt(1f/3f), -Mathf.Sqrt(1f/3f), Mathf.Sqrt(1f/3f)) * (planets[i].GetComponent<PlanetGravity>().scale);
+            spawnPoints[i].position = planets[i].position + new Vector3(Mathf.Sqrt(1f/3f), -Mathf.Sqrt(1f/3f), Mathf.Sqrt(1f/3f)) * (planets[i].GetComponent<PlanetGravity>().scale - planets[i].GetComponent<PlanetGravity>().scale / 3f);
             //print(planets[i].GetComponent<PlanetGravity>().scale);
             //Debug.Log((spawnPoints[i].position - planets[i].position).magnitude);
         }
