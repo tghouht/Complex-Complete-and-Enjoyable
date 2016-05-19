@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerCrosshair : MonoBehaviour
+public class PlayerCrosshair : NetworkBehaviour
 {
     [SerializeField]
     private float scale;
@@ -11,6 +12,8 @@ public class PlayerCrosshair : MonoBehaviour
 
     public void Start()
     {
+        if (!isLocalPlayer) return;
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         mouseLocked = true;

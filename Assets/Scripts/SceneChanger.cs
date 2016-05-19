@@ -42,7 +42,7 @@ public class SceneChanger : MonoBehaviour
             return;
         }
 
-        if (!networkManager.isNetworkActive || !networkManager.client.isConnected)
+        if (!networkManager.isNetworkActive)
         {
             Debug.Log("Apparently the client is not connected");
             ipAddress = "";
