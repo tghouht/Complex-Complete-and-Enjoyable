@@ -33,7 +33,13 @@ public class SceneChanger : MonoBehaviour
         }
         catch
         {
-
+            Debug.Log("Apparently the client is not connected");
+            ipAddress = "";
+            GameManager.instance = null;
+            GameManager.UnRegisterAll();
+            networkManager.networkAddress = null;
+            SceneManager.LoadScene(0);
+            return;
         }
 
         if (!networkManager.isNetworkActive)

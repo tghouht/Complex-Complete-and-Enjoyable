@@ -74,10 +74,7 @@ public class PlayerSetup : NetworkBehaviour
 
         if (isLocalPlayer)
         {
-            foreach (string p in GameManager.players.Keys)
-            {
-                print(p);
-            }
+            Debug.Log("OnDisable");
 
             SceneChanger.ipAddress = "";
             GameManager.UnRegisterAll();
