@@ -10,6 +10,8 @@ public class SceneChanger : MonoBehaviour
 
     bool start = false;
 
+	public AudioSource music;
+
     public void Awake()
     {
         networkManager = GetComponent<NetworkManager>();
@@ -30,6 +32,7 @@ public class SceneChanger : MonoBehaviour
                 networkManager.networkAddress = ipAddress;
                 networkManager.StartClient();
             }
+			music.Play();
         }
         catch
         {
