@@ -56,12 +56,19 @@ public class PlayerSetup : NetworkBehaviour
             sceneCamera.gameObject.SetActive(true);
         }
 
+        GameManager.UnRegisterPlayer(transform.name);
+
         if (isLocalPlayer)
         {
+            foreach (string p in GameManager.players.Keys)
+            {
+                print(p);
+            }
+
+            SceneChanger.ipAddress = "";
+            GameManager.UnRegisterAll();
             SceneManager.LoadScene(0);
         }
-
-        GameManager.UnRegisterPlayer(transform.name);
 
         //Debug.Log(transform.name + "'s setup script has just been disabled w/ camera=" + sceneCamera.gameObject.active);
     }

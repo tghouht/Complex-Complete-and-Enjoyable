@@ -33,6 +33,11 @@ public class PlayerController : NetworkBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            NetworkManager.singleton.StopHost();
+            NetworkManager.singleton.StopClient();
+        }
         /**
         Jumping and jetpack
          */

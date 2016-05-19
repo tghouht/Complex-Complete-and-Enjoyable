@@ -21,7 +21,7 @@ public class GameManager : NetworkBehaviour
     }
 
     #region Game management
-    private static Dictionary<string, PlayerManager> players = new Dictionary<string, PlayerManager>();
+    public static Dictionary<string, PlayerManager> players = new Dictionary<string, PlayerManager>();
 
     public static void RegisterPlayer(string id, PlayerManager player)
     {
@@ -32,6 +32,11 @@ public class GameManager : NetworkBehaviour
     public static void UnRegisterPlayer(string id)
     {
         players.Remove(id);
+    }
+
+    public static void UnRegisterAll()
+    {
+        players.Clear();
     }
 
     public static PlayerManager GetPlayer(string id)
@@ -46,7 +51,7 @@ public class GameManager : NetworkBehaviour
 
         foreach (string id in players.Keys)
         {
-            GUILayout.Label(id);
+            GUILayout.Label(id + " - " + players[id].getHealth());
         }
 
         GUILayout.EndVertical();

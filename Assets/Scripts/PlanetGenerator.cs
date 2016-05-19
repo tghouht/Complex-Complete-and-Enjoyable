@@ -12,9 +12,9 @@ public class PlanetGenerator : NetworkBehaviour {
 
     static public int maxNumofPlanets = 7;
 
-    static public int minNumofPlanets = 3;
+    static public int minNumofPlanets = 4;
 
-    static public float maxSizeofPlanets = 50f;
+    static public float maxSizeofPlanets = 45f;
 
     static public float minSizeofPlanets = 20f;
 
@@ -23,13 +23,13 @@ public class PlanetGenerator : NetworkBehaviour {
     static public float minDensityofPlanets = 3f;
 
     //Rectangle form -world_ to +world_ centered at 0,0,0
-    static public float worldX = 50f;
+    static public float worldX = 60f;
 
-    static public float worldY = 50f;
+    static public float worldY = 60f;
 
-    static public float worldZ = 50f;
+    static public float worldZ = 60f;
 
-    static public int maxSpawnAttempts = 24;
+    static public int maxSpawnAttempts = 28;
 
     [SerializeField]
     private GameObject planetPrefab;

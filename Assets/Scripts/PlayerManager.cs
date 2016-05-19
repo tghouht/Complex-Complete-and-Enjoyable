@@ -19,8 +19,21 @@ public class PlayerManager : NetworkBehaviour
 
     private bool[] wasEnabled;
 
+    private bool dragged;
+
     [SyncVar]
     private float health;
+
+    public void FixedUpdate()
+    {
+        if (dragged)
+            GetComponent<Rigidbody>().drag -= 1f;
+        if (GetComponent<Rigidbody>().drag <= 0)
+        {
+            GetComponent<Rigidbody>().drag = 0;
+            dragged = false;
+        }
+    }
 
     public void Setup ()
     {
@@ -58,6 +71,9 @@ public class PlayerManager : NetworkBehaviour
         transform.position = spawn.position;
         transform.rotation = spawn.rotation;
 
+        GetComponent<Rigidbody>().drag = 100f;
+        dragged = true;
+
         Debug.Log(transform.name + " has respawned after " + GameManager.instance.gameSettings.respawnTime + " seconds.");
     }
 
@@ -88,6 +104,11 @@ public class PlayerManager : NetworkBehaviour
         Debug.Log(transform.name + "is now dead.");
 
         StartCoroutine(Respawn());
+    }
+
+    public float getHealth()
+    {
+        return health;
     }
 
     void OnGUI()
