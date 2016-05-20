@@ -35,8 +35,8 @@ public class PlayerController : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            NetworkManager.singleton.StopHost();
             NetworkManager.singleton.StopClient();
+            NetworkManager.singleton.StopServer();
         }
         /**
         Jumping and jetpack
