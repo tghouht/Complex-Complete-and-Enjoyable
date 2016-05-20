@@ -76,6 +76,9 @@ public class PlayerSetup : NetworkBehaviour
         {
             Debug.Log("OnDisable");
 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             SceneChanger.ipAddress = "";
             GameManager.UnRegisterAll();
             SceneManager.LoadScene(0);

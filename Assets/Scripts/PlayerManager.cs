@@ -29,7 +29,7 @@ public class PlayerManager : NetworkBehaviour
     private bool dragged;
 
     [SyncVar]
-    private float health;
+    public float health;
     [SyncVar]
     private float lives;
 
@@ -38,10 +38,10 @@ public class PlayerManager : NetworkBehaviour
     public void FixedUpdate()
     {
         if (dragged)
-            GetComponent<Rigidbody>().drag -= 1f;
-        if (GetComponent<Rigidbody>().drag <= 0)
+            GetComponent<Rigidbody>().drag -= 5f;
+        if (GetComponent<Rigidbody>().drag <= 0f)
         {
-            GetComponent<Rigidbody>().drag = 0;
+            GetComponent<Rigidbody>().drag = 0f;
             dragged = false;
         }
 
