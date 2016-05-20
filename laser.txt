@@ -1,0 +1,34 @@
+using UnityEngine;
+using System.Collections;
+
+public class Shoot : MonoBehaviour
+{
+	LineRenderer line;
+	public Material material;
+	public GameObject target;
+	void Start ()
+	{
+		line = GetComponent<LineRenderer> ();
+		line.enabled = false;
+	}
+
+	void Update ()
+	{
+		RaycastHit hit;
+		if(Input.GetMouseButtonDown(0) && Physics.Raycast(gameObject.transform.position, target.transform.position - transform.position, out hit))
+		{
+			MakeLaser(hit.transform.position);
+		}
+	}
+	void MakeLaser(Vector3 transformposition)
+	{
+		Vector3[] vertices = new Vector3[2];
+		vertices[0] = transform.position;
+		vertices[1] = transformposition;
+
+		line.material = material;
+		line.SetWidth (.05f, .05f);
+		line.SetPositions(vertices);
+		line.enabled = true;
+	}
+}
