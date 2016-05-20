@@ -22,7 +22,7 @@ public class PlayerShoot : NetworkBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && PlayerCrosshair.mouseLocked)
+        if (Input.GetButtonDown("Fire1") && !Cursor.visible)
         {
             Shoot();
         }

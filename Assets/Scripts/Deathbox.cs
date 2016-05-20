@@ -17,9 +17,9 @@ public class Deathbox : MonoBehaviour
 
     public void OnTriggerExit(Collider collider)
     {
-        if (collider.tag.Equals("Player") && collider.gameObject.GetComponent<NetworkIdentity>().isLocalPlayer)
+        if (collider.tag.Equals("Player"))
         {
-            collider.transform.parent.GetComponent<PlayerManager>().Die();
+            collider.transform.GetComponent<PlayerManager>().Die();
             Debug.Log(collider.name + " has run into the deathbox!");
             //collider.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }

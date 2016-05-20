@@ -43,7 +43,7 @@ public class PlayerController : NetworkBehaviour
          */
         if (Input.GetButtonDown("Jump") && playerMotor.isGrounded)
         {
-            playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * jumpPower : Vector3.zero);
+            playerMotor.Jump(!Cursor.visible ? transform.up * jumpPower : Vector3.zero);
         }
         else
         {
@@ -56,7 +56,7 @@ public class PlayerController : NetworkBehaviour
 
             if (superDuration <= 0f)
             {
-                playerMotor.Jump(PlayerCrosshair.mouseLocked ? transform.up * superJumpPower : Vector3.zero);
+                playerMotor.Jump(!Cursor.visible ? transform.up * superJumpPower : Vector3.zero);
                 superDuration = timeLapseSuper;
             }
         }
@@ -83,7 +83,7 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 velocity = (horiMove + vertMove).normalized * speed;
 
-        playerMotor.Move(PlayerCrosshair.mouseLocked ? velocity : Vector3.zero);
+        playerMotor.Move(!Cursor.visible ? velocity : Vector3.zero);
 
         /**
         Rotation for camera
@@ -92,7 +92,7 @@ public class PlayerController : NetworkBehaviour
 
         float cameraRotation = xRot * lookSensitivity;
 
-        playerMotor.RotateCamera(PlayerCrosshair.mouseLocked ? cameraRotation : 0f);
+        playerMotor.RotateCamera(!Cursor.visible ? cameraRotation : 0f);
 
         /**
         Rotation for player
@@ -101,6 +101,6 @@ public class PlayerController : NetworkBehaviour
 
         float bodyRotation = yRot * lookSensitivity;
 
-        playerMotor.Rotate(new Vector3(0f, PlayerCrosshair.mouseLocked ? bodyRotation : 0f, 0f));
+        playerMotor.Rotate(new Vector3(0f, !Cursor.visible ? bodyRotation : 0f, 0f));
 	}
 }

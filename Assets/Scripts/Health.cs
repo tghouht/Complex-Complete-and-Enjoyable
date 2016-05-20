@@ -16,7 +16,6 @@ public class Health : MonoBehaviour {
 	void Update ()
     {
         SetHealthBar (health / MaxHealth);
-        Debug.Log(health);
 
 	}
 	void decreaseHealth()

@@ -8,32 +8,25 @@ public class PlayerCrosshair : NetworkBehaviour
     [SerializeField]
     private Texture2D crosshairImage;
 
-    public static bool mouseLocked;
-
     public void Start()
     {
         if (!isLocalPlayer) return;
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        mouseLocked = true;
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            mouseLocked = !mouseLocked;
+            Cursor.visible = !Cursor.visible;
         }
 
-        Cursor.visible = !mouseLocked;
-        Cursor.lockState = mouseLocked ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.lockState = Cursor.visible ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     public void OnGUI()
     {
-        float xMin = ((float) Screen.width / 2f) - ((float) crosshairImage.width / (scale * 2));
-        float yMin = ((float) Screen.height / 2f) - ((float) crosshairImage.height / (scale * 2));
+        float xMin = ((float) Screen.width / 2f) - ((float) crosshairImage.width / (scale * 2f));
+        float yMin = ((float) Screen.height / 2f) - ((float) crosshairImage.height / (scale * 2f));
         GUI.DrawTexture(new Rect(xMin, yMin, crosshairImage.width / scale, crosshairImage.height / scale), crosshairImage);
     }
 
@@ -41,6 +34,5 @@ public class PlayerCrosshair : NetworkBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        mouseLocked = false;
     }
 }

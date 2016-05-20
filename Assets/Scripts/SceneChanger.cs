@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SceneChanger : MonoBehaviour
 {
@@ -8,18 +9,13 @@ public class SceneChanger : MonoBehaviour
 
     private NetworkManager networkManager;
 
-    bool start = false;
-
 	public AudioSource music;
-
-    public void Awake()
-    {
-        networkManager = GetComponent<NetworkManager>();
-    }
 
     //Establish all sceney stuff
     public void Start()
     {
+        networkManager = GetComponent<NetworkManager>();
+
         try
         {
 
@@ -30,32 +26,44 @@ public class SceneChanger : MonoBehaviour
             else
             {
                 networkManager.networkAddress = ipAddress;
-                networkManager.StartClient();
+
+                NetworkClient networkClient = networkManager.StartClient();
+
+                StartCoroutine(lolCat(networkClient));
             }
 			music.Play();
         }
         catch
         {
-            Debug.Log("Apparently the client is not connected");
-            ipAddress = "";
-            GameManager.instance = null;
-            GameManager.UnRegisterAll();
-            networkManager.networkAddress = null;
-            SceneManager.LoadScene(0);
-            return;
+
         }
 
         if (!networkManager.isNetworkActive)
         {
-            Debug.Log("Apparently the client is not connected");
-            ipAddress = "";
-            GameManager.instance = null;
-            GameManager.UnRegisterAll();
-            networkManager.networkAddress = null;
-            SceneManager.LoadScene(0);
-            return;
+            ExitScene();
         }
+    }
 
-        start = true;
+    private IEnumerator lolCat(NetworkClient networkClient)
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (networkClient.connection == null || !networkClient.isConnected)
+        {
+            ExitScene();
+        }
+    }
+
+    private void ExitScene()
+    {
+        Debug.Log("Apparently the client is not connected");
+        ipAddress = "";
+        GameManager.instance = null;
+        GameManager.UnRegisterAll();
+        networkManager.StopClient();
+        networkManager.StopHost();
+        networkManager.StopServer();
+        networkManager.networkAddress = null;
+        SceneManager.LoadScene(0);
     }
 }
