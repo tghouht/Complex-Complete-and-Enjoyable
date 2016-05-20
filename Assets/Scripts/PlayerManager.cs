@@ -61,7 +61,7 @@ public class PlayerManager : NetworkBehaviour
         }
 
         SetupVars();
-        lives = 2f;
+        lives = 5f;
     }
 
     [ClientRpc]

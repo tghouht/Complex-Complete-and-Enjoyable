@@ -51,7 +51,11 @@ public class PlayerSetup : NetworkBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.L) && isLocalPlayer)
+        {
+            NetworkManager.singleton.StopClient();
+            NetworkManager.singleton.StopServer();
+        }
     }
 
     public void HasPermDeathed()
